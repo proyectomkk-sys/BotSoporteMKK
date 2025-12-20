@@ -15,7 +15,6 @@
       --shadow:0 16px 50px rgba(0,0,0,.45);
       --radius:18px;
       --danger:#e53935;
-      --accent:#2f80ed;
     }
 
     *{box-sizing:border-box}
@@ -83,7 +82,6 @@
       font-weight:600;
     }
 
-    /* BOTÓN VOLVER */
     .btn-back{
       margin-top:16px;
       width:100%;
@@ -97,38 +95,63 @@
       cursor:pointer;
     }
 
-    .btn-back:active{
-      transform:scale(0.98);
-    }
+    .btn-back:active{transform:scale(.98)}
 
-    /* MODAL VIDEO */
+    /* ===== MODAL ===== */
     .modal{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,0.7);
+      background:rgba(0,0,0,.75);
       display:none;
       align-items:center;
       justify-content:center;
       z-index:999;
+      animation:fadeIn .25s ease;
     }
+
+    .modal.show{display:flex}
 
     .modal-content{
-      width: 85%;
-      max-width: 420px;   /* ⬅ tamaño controlado */
-      background: #000;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
+      width:85%;
+      max-width:420px;
+      background:#000;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      transform:scale(.9);
+      animation:zoomIn .25s ease forwards;
+      position:relative;
     }
 
+    .close-btn{
+      position:absolute;
+      top:8px;
+      right:10px;
+      font-size:22px;
+      font-weight:700;
+      color:#fff;
+      cursor:pointer;
+      z-index:2;
+      opacity:.8;
+    }
+
+    .close-btn:hover{opacity:1}
 
     video{
-      width: 100%;
-      max-height: 70vh;   /* ⬅ evita que sea gigante */
-      object-fit: contain;
-      display: block;
+      width:100%;
+      max-height:70vh;
+      object-fit:contain;
+      display:block;
     }
 
+    @keyframes fadeIn{
+      from{opacity:0}
+      to{opacity:1}
+    }
+
+    @keyframes zoomIn{
+      to{transform:scale(1)}
+    }
 
     @media(max-width:420px){
       .title{font-size:20px}
@@ -162,35 +185,44 @@
 
     <div class="final">Felicidades, lograste recargar tu cuenta!</div>
 
-    <button class="btn-back" onclick="goBack()">⬅ VOLVER</button>
+    <button class="btn-back" onclick="history.back()">⬅ VOLVER</button>
   </section>
 
 </main>
 
 <!-- MODAL VIDEO -->
-<div class="modal" id="videoModal" onclick="closeVideo()">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <video controls playsinline>
+<div class="modal" id="videoModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeVideo()">✕</span>
+    <video id="videoPlayer" controls playsinline>
       <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/BotCarga.mp4" type="video/mp4">
     </video>
   </div>
 </div>
 
 <script>
+  const modal = document.getElementById("videoModal");
+  const video = document.getElementById("videoPlayer");
+  const STORAGE_KEY = "video_recargas_visto";
+
   function openVideo(){
-    document.getElementById("videoModal").style.display="flex";
+    modal.classList.add("show");
+    video.currentTime = 0;
+    video.play().catch(()=>{});
   }
 
   function closeVideo(){
-    const modal = document.getElementById("videoModal");
-    const video = modal.querySelector("video");
     video.pause();
-    modal.style.display="none";
+    modal.classList.remove("show");
+    localStorage.setItem(STORAGE_KEY, "true");
   }
 
-  function goBack(){
-    history.back();
-  }
+  // Si nunca vio el video, se puede abrir automáticamente (opcional)
+  // window.addEventListener("load", () => {
+  //   if(!localStorage.getItem(STORAGE_KEY)){
+  //     openVideo();
+  //   }
+  // });
 </script>
 
 </body>
