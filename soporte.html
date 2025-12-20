@@ -91,11 +91,29 @@ body{
       <span>Tutoriales</span>
     </div>
 
-    <div class="btn"
-     onclick="window.location.href='https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html'">
-      <div class="icon">💳</div>
-      <span>Recargas</span>
-    </div>   
+    <div class="btn" onclick="openCargas()">
+  <div class="icon">💳</div>
+  <span>Cargas</span>
+</div>
+
+<audio id="sfxCargas" preload="auto">
+  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundrecarga.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  function openCargas() {
+    // Reproduce el sonido (permitido porque hay interacción del usuario)
+    const audio = document.getElementById("sfxCargas");
+    audio.currentTime = 0;
+    audio.play().catch(() => { /* silencio si el sistema lo bloquea */ });
+
+    // Redirige a la pantalla de recargas
+    setTimeout(() => {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html";
+    }, 180); // pequeño delay para que se escuche el sonido
+  }
+</script>
+   
 
     <div class="btn" onclick="sendResult('pagos')">
       <div class="icon">💵</div>
@@ -117,5 +135,6 @@ function sendResult(option){
 </body>
 
 </html>
+
 
 
