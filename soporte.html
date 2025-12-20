@@ -91,10 +91,18 @@ body{
       <span>Tutoriales</span>
     </div>
 
-    <div class="btn" onclick="sendResult('cargas')">
+    <div class="btn" onclick="openRecargas('cargas')">
       <div class="icon">💳</div>
-      <span>Cargas</span>
+      <span>Recargas</span>
     </div>
+    <script>
+    function openRecargas() {
+    // Si quieres reportar algo al bot después
+    // Telegram.WebApp.sendData("cargas");
+
+    window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html";
+    }
+    </script>
 
     <div class="btn" onclick="sendResult('pagos')">
       <div class="icon">💵</div>
@@ -114,4 +122,5 @@ function sendResult(option){
 </script>
 
 </body>
+
 </html>
