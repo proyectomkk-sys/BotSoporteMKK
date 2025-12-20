@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MiniApp Menu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+:root{
+  --bg:#eef3ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --primary:#4f8bff;
+  --border:#d6e1ff;
+}
+
+body{
+  margin:0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  width:100%;
+  max-width:430px;
+  padding:26px;
+}
+
+.title{
+  text-align:center;
+  color:#111827;
+  font-size:1.3rem;
+  margin-bottom:25px;
+  font-weight:600;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.btn{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px 10px;
+  color:var(--text);
+  text-align:center;
+  transition:.25s;
+  cursor:pointer;
+}
+
+.btn:hover{
+  transform: translateY(-3px);
+  border-color: var(--primary);
+  box-shadow:0 10px 28px rgba(79,139,255,.25);
+}
+
+.icon{
+  font-size:34px;
+  margin-bottom:6px;
+}
+
+.btn span{
+  display:block;
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:.3px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <div class="title">Selecciona una opción</div>
+
+  <div class="grid">
+    <div class="btn" onclick="sendResult('promociones')">
+      <div class="icon">🎁</div>
+      <span>Promociones</span>
+    </div>
+
+    <div class="btn" onclick="sendResult('tutoriales')">
+      <div class="icon">📚</div>
+      <span>Tutoriales</span>
+    </div>
+
+    <div class="btn" onclick="sendResult('cargas')">
+      <div class="icon">💳</div>
+      <span>Cargas</span>
+    </div>
+
+    <div class="btn" onclick="sendResult('pagos')">
+      <div class="icon">💵</div>
+      <span>Pagos</span>
+    </div>
+  </div>
+</div>
+
+<script>
+let tg = window.Telegram.WebApp;
+tg.expand();
+
+function sendResult(option){
+  tg.sendData(option);
+  tg.close();
+}
+</script>
+
+</body>
+</html>
