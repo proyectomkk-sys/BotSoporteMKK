@@ -15,6 +15,8 @@
       --shadow:0 16px 50px rgba(0,0,0,.45);
       --radius:18px;
       --danger:#e53935;
+      --cold:#3fa9f5;
+      --cold-soft:rgba(63,169,245,0.15);
     }
 
     *{box-sizing:border-box}
@@ -58,7 +60,6 @@
       color:var(--danger);
       font-weight:800;
       font-size:26px;
-      cursor:pointer;
       user-select:none;
     }
 
@@ -82,8 +83,43 @@
       font-weight:600;
     }
 
+    /* BOTÓN VER VIDEO */
+    .btn-video{
+      margin-top:18px;
+      width:100%;
+      padding:13px;
+      border-radius:14px;
+      border:1px solid rgba(63,169,245,0.45);
+      background:linear-gradient(
+        180deg,
+        rgba(63,169,245,0.22),
+        rgba(63,169,245,0.12)
+      );
+      color:#dbeeff;
+      font-size:15px;
+      font-weight:650;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition:all .25s ease;
+    }
+
+    .btn-video:hover{
+      background:linear-gradient(
+        180deg,
+        rgba(63,169,245,0.35),
+        rgba(63,169,245,0.18)
+      );
+    }
+
+    .btn-video:active{
+      transform:scale(.97);
+    }
+
     .btn-back{
-      margin-top:16px;
+      margin-top:12px;
       width:100%;
       padding:12px;
       border-radius:14px;
@@ -97,7 +133,7 @@
 
     .btn-back:active{transform:scale(.98)}
 
-    /* ===== MODAL ===== */
+    /* MODAL */
     .modal{
       position:fixed;
       inset:0;
@@ -131,7 +167,6 @@
       font-weight:700;
       color:#fff;
       cursor:pointer;
-      z-index:2;
       opacity:.8;
     }
 
@@ -164,7 +199,7 @@
 
   <section class="card">
     <h1 class="title">
-      <span class="icon-question" onclick="openVideo()">?</span>
+      <span class="icon-question">?</span>
       RECARGAS
     </h1>
 
@@ -184,6 +219,10 @@
     </ol>
 
     <div class="final">Felicidades, lograste recargar tu cuenta!</div>
+
+    <button class="btn-video" onclick="openVideo()">
+      ▶ VER VIDEO
+    </button>
 
     <button class="btn-back" onclick="history.back()">⬅ VOLVER</button>
   </section>
@@ -216,13 +255,6 @@
     modal.classList.remove("show");
     localStorage.setItem(STORAGE_KEY, "true");
   }
-
-  // Si nunca vio el video, se puede abrir automáticamente (opcional)
-  // window.addEventListener("load", () => {
-  //   if(!localStorage.getItem(STORAGE_KEY)){
-  //     openVideo();
-  //   }
-  // });
 </script>
 
 </body>
