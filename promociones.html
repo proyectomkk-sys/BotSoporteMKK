@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promociones</title>
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#111722;
+      --line:rgba(255,255,255,0.12);
+      --shadow:0 14px 40px rgba(0,0,0,.5);
+      --radius:18px;
+    }
+
+    *{ box-sizing:border-box }
+
+    body{
+      margin:0;
+      background:var(--bg);
+      font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      padding:16px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:420px; /* Ideal para móviles */
+      display:grid;
+      gap:18px;
+    }
+
+    .promo-card{
+      background:var(--card);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+    }
+
+    .promo-card img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .promo-footer{
+      padding:10px;
+      text-align:center;
+      font-size:13px;
+      color:rgba(255,255,255,0.65);
+    }
+
+    .btn-back{
+      margin-top:6px;
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.08);
+      color:#fff;
+      font-size:15px;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .btn-back:active{
+      transform:scale(0.97);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+
+    <!-- PROMOCIÓN 1 -->
+    <section class="promo-card">
+      <img
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/Promo1.png"
+        alt="Promoción Papa Noel -10%"
+      >
+      <div class="promo-footer">
+        Promoción válida por tiempo limitado
+      </div>
+    </section>
+
+    <!-- AQUÍ PUEDES AGREGAR MÁS PROMOS -->
+    <!--
+    <section class="promo-card">
+      <img src="Promo2.png" alt="Promoción 2">
+      <div class="promo-footer">Texto opcional</div>
+    </section>
+    -->
+
+    <button class="btn-back" onclick="history.back()">⬅ VOLVER</button>
+
+  </main>
+</body>
+</html>
