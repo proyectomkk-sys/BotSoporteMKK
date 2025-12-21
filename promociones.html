@@ -96,17 +96,8 @@
         Maneja despacio, apuesta fuerte!
       </div>
     </section>  
-    <button class="btn-back" onclick="closeMiniApp()">⬅ VOLVER</button>
+    
   </main>    
-    <script>
-      function closeMiniApp(){
-        if (window.Telegram && Telegram.WebApp) {
-            Telegram.WebApp.close();
-          } else {
-          // Fallback por si se abre en navegador normal
-          history.back();
-          }
-      }
-    </script>
+    
 </body>
 </html>
