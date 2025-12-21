@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RECARGAS</title>
 
   <style>
@@ -16,10 +16,9 @@
       --radius:18px;
       --danger:#e53935;
       --cold:#3fa9f5;
-      --cold-soft:rgba(63,169,245,0.15);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box }
 
     body{
       margin:0;
@@ -74,7 +73,7 @@
       padding:0;
     }
 
-    ol li{margin:8px 0}
+    ol li{ margin:8px 0 }
 
     .final{
       margin-top:14px;
@@ -92,12 +91,12 @@
       border:1px solid rgba(63,169,245,0.45);
       background:linear-gradient(
         180deg,
-        rgba(63,169,245,0.22),
+        rgba(63,169,245,0.25),
         rgba(63,169,245,0.12)
       );
-      color:#dbeeff;
+      color:#e7f2ff;
       font-size:15px;
-      font-weight:650;
+      font-weight:700;
       cursor:pointer;
       display:flex;
       align-items:center;
@@ -106,17 +105,7 @@
       transition:all .25s ease;
     }
 
-    .btn-video:hover{
-      background:linear-gradient(
-        180deg,
-        rgba(63,169,245,0.35),
-        rgba(63,169,245,0.18)
-      );
-    }
-
-    .btn-video:active{
-      transform:scale(.97);
-    }
+    .btn-video:active{ transform:scale(.97) }
 
     .btn-back{
       margin-top:12px;
@@ -125,15 +114,15 @@
       border-radius:14px;
       border:1px solid var(--line);
       background:rgba(255,255,255,0.08);
-      color:var(--text);
+      color:#fff;
       font-size:15px;
       font-weight:600;
       cursor:pointer;
     }
 
-    .btn-back:active{transform:scale(.98)}
+    .btn-back:active{ transform:scale(.97) }
 
-    /* MODAL */
+    /* ===== MODAL VIDEO ===== */
     .modal{
       position:fixed;
       inset:0;
@@ -141,11 +130,11 @@
       display:none;
       align-items:center;
       justify-content:center;
-      z-index:999;
+      z-index:9999;
       animation:fadeIn .25s ease;
     }
 
-    .modal.show{display:flex}
+    .modal.show{ display:flex }
 
     .modal-content{
       width:85%;
@@ -159,18 +148,27 @@
       position:relative;
     }
 
-    .close-btn{
-      position:absolute;
-      top:8px;
-      right:10px;
-      font-size:22px;
-      font-weight:700;
-      color:#fff;
-      cursor:pointer;
-      opacity:.8;
+    .modal-header{
+      display:flex;
+      justify-content:flex-end;
+      padding:10px 12px;
+      background:rgba(0,0,0,0.6);
+      border-bottom:1px solid rgba(255,255,255,0.1);
     }
 
-    .close-btn:hover{opacity:1}
+    .close-btn{
+      border:none;
+      background:transparent;
+      color:#fff;
+      font-size:22px;
+      font-weight:800;
+      cursor:pointer;
+      padding:6px 10px;
+      border-radius:10px;
+      opacity:.9;
+    }
+
+    .close-btn:active{ transform:scale(.95) }
 
     video{
       width:100%;
@@ -180,16 +178,16 @@
     }
 
     @keyframes fadeIn{
-      from{opacity:0}
-      to{opacity:1}
+      from{ opacity:0 }
+      to{ opacity:1 }
     }
 
     @keyframes zoomIn{
-      to{transform:scale(1)}
+      to{ transform:scale(1) }
     }
 
     @media(max-width:420px){
-      .title{font-size:20px}
+      .title{ font-size:20px }
     }
   </style>
 </head>
@@ -220,19 +218,18 @@
 
     <div class="final">Felicidades, lograste recargar tu cuenta!</div>
 
-    <button class="btn-video" onclick="openVideo()">
-      ▶ VER VIDEO
-    </button>
-
+    <button class="btn-video" onclick="openVideo()">▶ VER VIDEO</button>
     <button class="btn-back" onclick="history.back()">⬅ VOLVER</button>
   </section>
 
 </main>
 
-<!-- MODAL VIDEO -->
+<!-- MODAL -->
 <div class="modal" id="videoModal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeVideo()">✕</span>
+  <div class="modal-content" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <button class="close-btn" id="closeVideoBtn" aria-label="Cerrar">✕</button>
+    </div>
     <video id="videoPlayer" controls playsinline>
       <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/BotCarga.mp4" type="video/mp4">
     </video>
@@ -242,6 +239,7 @@
 <script>
   const modal = document.getElementById("videoModal");
   const video = document.getElementById("videoPlayer");
+  const closeBtn = document.getElementById("closeVideoBtn");
   const STORAGE_KEY = "video_recargas_visto";
 
   function openVideo(){
@@ -255,6 +253,22 @@
     modal.classList.remove("show");
     localStorage.setItem(STORAGE_KEY, "true");
   }
+
+  closeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeVideo();
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeVideo();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("show")) {
+      closeVideo();
+    }
+  });
 </script>
 
 </body>
