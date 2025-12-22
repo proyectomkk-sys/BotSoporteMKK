@@ -94,7 +94,7 @@ body{
 
     <div class="btn" onclick="openCargas()">
       <div class="icon">💳</div>
-      <span>Cargas</span>
+      <span>Recargas</span>
     </div>
 
     <audio id="sfxCargas" preload="auto">
@@ -115,9 +115,32 @@ body{
       }
     </script>   
 
-    <div class="btn" onclick="sendResult('pagos')">
+    <div class="btn" onclick="sendResult('cobros')">
       <div class="icon">💵</div>
-      <span>Pagos</span>
+      <span>Cobros</span>
+    </div>
+
+    <audio id="sfxCargas" preload="auto">
+      <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcobro.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+      function openCobros() {
+    // Reproduce el sonido (permitido porque hay interacción del usuario)
+      const audio = document.getElementById("sfxCobros");
+        audio.currentTime = 0;
+        audio.play().catch(() => { /* silencio si el sistema lo bloquea */ });
+
+    // Redirige a la pantalla de cobros
+        setTimeout(() => {
+          window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cobros.html";
+        }, 1000); // pequeño delay para que se escuche el sonido
+      }
+    </script> 
+
+    <div class="btn" onclick="sendResult('pagos')">
+      <div class="icon">🔄</div>
+      <span>Cambios APP--PPP</span>
     </div>
   </div>
 </div>
