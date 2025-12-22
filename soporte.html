@@ -138,10 +138,27 @@ body{
       }
     </script> 
 
-    <div class="btn" onclick="sendResult('pagos')">
+    <div class="btn" onclick="sendResult('cambios')">
       <div class="icon">🔄</div>
       <span>Cambios APP--PPP</span>
     </div>
+    <audio id="sfxCambios" preload="auto">
+      <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcobro.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+      function openCambios() {
+    // Reproduce el sonido (permitido porque hay interacción del usuario)
+      const audio = document.getElementById("sfxCambios");
+        audio.currentTime = 0;
+        audio.play().catch(() => { /* silencio si el sistema lo bloquea */ });
+
+    // Redirige a la pantalla de cobros
+        setTimeout(() => {
+          window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cambios.html";
+        }, 2000); // pequeño delay para que se escuche el sonido
+      }
+    </script>
   </div>
 </div>
 
