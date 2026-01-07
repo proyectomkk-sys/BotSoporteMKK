@@ -80,101 +80,101 @@ body{
 <div class="container">
   <div class="title">Selecciona una opción</div>
 
-    <!--<div class="grid">
-      <div class="btn"
-        onclick="window.location.href='https://proyectomkk-sys.github.io/BotSoporteMKK/promociones.html'">
-      <div class="icon">🎁</div>
-      <span>Promociones</span>
-    </div>-->
+  <!-- ✅ GRILLA ACTIVADA -->
+  <div class="grid">
 
-    <!--<div class="btn" onclick="sendResult('tutoriales')">
-      <div class="icon">📚</div>
-      <span>Tutoriales</span>
-    </div>-->
-
+    <!-- RECARGAS -->
     <div class="btn" onclick="openCargas()">
       <div class="icon">💳</div>
       <span>Recargas</span>
     </div>
 
-    <audio id="sfxCargas" preload="auto">
-      <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundrecarga.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-      function openCargas() {
-    // Reproduce el sonido (permitido porque hay interacción del usuario)
-      const audio = document.getElementById("sfxCargas");
-        audio.currentTime = 0;
-        audio.play().catch(() => { /* silencio si el sistema lo bloquea */ });
-
-    // Redirige a la pantalla de recargas
-        setTimeout(() => {
-          window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html";
-        }, 1000); // pequeño delay para que se escuche el sonido
-      }
-    </script>   
-
+    <!-- COBROS -->
     <div class="btn" onclick="openCobros()">
       <div class="icon">💵</div>
       <span>Cobros</span>
     </div>
 
-    <audio id="sfxCobros" preload="auto">
-      <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcobro.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-      function openCobros() {
-    // Reproduce el sonido (permitido porque hay interacción del usuario)
-      const audio = document.getElementById("sfxCobros");
-        audio.currentTime = 0;
-        audio.play().catch(() => { /* silencio si el sistema lo bloquea */ });
-
-    // Redirige a la pantalla de cobros
-        setTimeout(() => {
-          window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cobros.html";
-        }, 1500); // pequeño delay para que se escuche el sonido
-      }
-    </script> 
-
+    <!-- CAMBIOS -->
     <div class="btn" onclick="openCambios()">
       <div class="icon">🔄</div>
       <span>Cambios APP--PPP</span>
     </div>
-    <audio id="sfxCambios" preload="auto">
-      <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcambio.mp3" type="audio/mpeg">
-    </audio>
 
-    <script>
-      function openCambios() {
-    // Reproduce el sonido (permitido porque hay interacción del usuario)
-      const audio = document.getElementById("sfxCambios");
-        audio.currentTime = 0;
-        audio.play().catch(() => { /* silencio si el sistema lo bloquea */ });
+    <!-- ✅ REPORTAR FALLA (NUEVO) -->
+    <div class="btn" onclick="openReportarFalla()">
+      <div class="icon">🚨</div>
+      <span>Reportar Falla</span>
+    </div>
 
-    // Redirige a la pantalla de cobros
-        setTimeout(() => {
-          window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cambios.html";
-        }, 1000); // pequeño delay para que se escuche el sonido
-      }
-    </script>
   </div>
 </div>
 
+<!-- Audios -->
+<audio id="sfxCargas" preload="auto">
+  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundrecarga.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="sfxCobros" preload="auto">
+  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcobro.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="sfxCambios" preload="auto">
+  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcambio.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ✅ Audio opcional para Reportar -->
+<audio id="sfxFalla" preload="auto">
+  <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
+  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcambio.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-let tg = window.Telegram.WebApp;
-tg.expand();
+  let tg = window.Telegram.WebApp;
+  tg.expand();
 
-function sendResult(option){
-  tg.sendData(option);
-  tg.close();
-}
+  function playSfx(id){
+    const audio = document.getElementById(id);
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+
+  function openCargas() {
+    playSfx("sfxCargas");
+    setTimeout(() => {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html";
+    }, 1000);
+  }
+
+  function openCobros() {
+    playSfx("sfxCobros");
+    setTimeout(() => {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cobros.html";
+    }, 1500);
+  }
+
+  function openCambios() {
+    playSfx("sfxCambios");
+    setTimeout(() => {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cambios.html";
+    }, 1000);
+  }
+
+  // ✅ NUEVO: abre tu miniapp de reportes
+  function openReportarFalla() {
+    playSfx("sfxFalla");
+    setTimeout(() => {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportar.html";
+    }, 900);
+  }
+
+  // (te lo dejo por si aún lo usas en otras pantallas)
+  function sendResult(option){
+    tg.sendData(option);
+    tg.close();
+  }
 </script>
+
 </body>
-
 </html>
-
-
-
-
