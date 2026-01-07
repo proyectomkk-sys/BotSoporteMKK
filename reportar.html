@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reportar Falla</title>
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; padding: 14px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; }
+    h3 { margin: 0 0 10px; }
+    .muted { opacity: .8; font-size: 14px; margin: 6px 0 12px; }
+    label { display:block; margin: 10px 0 6px; font-weight: 600; }
+    input, textarea, button {
+      width: 100%; padding: 10px; border-radius: 10px;
+      border: 1px solid #ccc; box-sizing: border-box;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    button { border: 0; cursor: pointer; margin-top: 10px; }
+    .btn1 { margin-top: 14px; }
+    .btn2 { margin-top: 10px; }
+    .small { font-size: 12px; opacity: .75; margin-top: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h3>🚨 Reportar una falla</h3>
+    <div id="userInfo" class="muted">Cargando datos de Telegram…</div>
+
+    <label>Descripción breve</label>
+    <textarea id="desc" placeholder="Ej: No me carga el cobro / Se queda en 'procesando' / Error al recargar…"></textarea>
+
+    <label>Adjuntar captura (opcional)</label>
+    <input id="shot" type="file" accept="image/*" />
+
+    <button class="btn1" id="sendBtn">📨 Enviar reporte</button>
+    <button class="btn2" id="chatBtn">💬 Chatear con una persona</button>
+
+    <div class="small">
+      Nota: Si adjuntas captura, se enviará junto a tu reporte (cuando conectemos el servidor).
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user;
+    const userInfo = document.getElementById("userInfo");
+    const descEl = document.getElementById("desc");
+    const fileEl = document.getElementById("shot");
+
+    // Mostrar info del usuario
+    if (user) {
+      const fullName = [user.first_name, user.last_name].filter(Boolean).join(" ");
+      userInfo.textContent = `👤 ${fullName} | @${user.username || "sin_username"} | id: ${user.id}`;
+    } else {
+      userInfo.textContent = "⚠️ No pude leer datos del usuario. Abre esto desde Telegram.";
+    }
+
+    // ✅ Por ahora, enviamos datos al bot usando sendData (SIN imagen).
+    // Para enviar imagen al grupo, necesitamos un backend (lo hacemos en el siguiente paso).
+    function buildPayload(chatRequest) {
+      return JSON.stringify({
+        type: "reporte_falla",
+        chatRequest: !!chatRequest,
+        description: descEl.value.trim(),
+        hasScreenshot: !!fileEl.files?.[0],
+        user: user || null,
+        ts: Date.now()
+      });
+    }
+
+    function validar() {
+      const d = descEl.value.trim();
+      if (!user) { alert("Abre esta pantalla desde Telegram."); return false; }
+      if (d.length < 5) { alert("Describe el problema con un poco más de detalle."); return false; }
+      return true;
+    }
+
+    document.getElementById("sendBtn").addEventListener("click", () => {
+      if (!validar()) return;
+      tg.sendData(buildPayload(false));
+      tg.showAlert("✅ Reporte enviado. Un agente te responderá por el chat.");
+      tg.close();
+    });
+
+    document.getElementById("chatBtn").addEventListener("click", () => {
+      if (!validar()) return;
+      tg.sendData(buildPayload(true));
+      tg.showAlert("✅ Solicitud enviada. Te atenderá una persona por el chat.");
+      tg.close();
+    });
+  </script>
+</body>
+</html>

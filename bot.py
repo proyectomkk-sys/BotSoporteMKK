@@ -9,9 +9,17 @@ from telegram.ext import (
 # 🔑 REEMPLAZA con tu token REAL (entre comillas)
 TOKEN = "8078893425:AAH7MJXXWPI3-sIshPJVE7G1c4H3UOEroy8"
 
-# ✅ URL pública de tu miniapp (GitHub Pages recomendado)
-WEBAPP_URL = "https://proyectomkk-sys.github.io/BotSoporteMKK/soporte.html"
-WEBAPP_Promociones = "https://proyectomkk-sys.github.io/BotSoporteMKK/promociones.html"
+# ✅ URLs públicas de tus miniapps (GitHub Pages recomendado)
+WEBAPP_PROMOCIONES = "https://proyectomkk-sys.github.io/BotSoporteMKK/promociones.html"
+WEBAPP_TUTORIALES  = "https://proyectomkk-sys.github.io/BotSoporteMKK/soporte.html"
+
+# ✅ Agrega estas miniapps (ajusta a tus rutas reales)
+WEBAPP_RECARGAS    = "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html"
+WEBAPP_COBROS      = "https://proyectomkk-sys.github.io/BotSoporteMKK/cobros.html"
+WEBAPP_CAMBIOS     = "https://proyectomkk-sys.github.io/BotSoporteMKK/cambios.html"
+
+# ✅ Miniapp para reportar falla (la que construiremos con formulario + captura + botón chatear)
+WEBAPP_REPORTAR    = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportar.html"
 
 
 # ─────────────────────────────
@@ -24,7 +32,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
-        "Aquí encontrarás las últimas promociones y tutoriales para aprovechar al máximo nuestros servicios. ",
+        "Aquí encontrarás información y accesos rápidos a nuestros servicios.",
         reply_markup=reply_markup
     )
 
@@ -37,46 +45,20 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton("🎁 Promociones", web_app=WebAppInfo(url=WEBAPP_Promociones))],
-        # ✅ Abre la WebApp directo (sin callback_data)
-        [InlineKeyboardButton("📺 Tutoriales", web_app=WebAppInfo(url=WEBAPP_URL))],
-        #[InlineKeyboardButton("🚨 Reportar una falla", callback_data="falla")]
+        [InlineKeyboardButton("🎁 Promociones", web_app=WebAppInfo(url=WEBAPP_PROMOCIONES))],
+        [InlineKeyboardButton("📺 Tutoriales",  web_app=WebAppInfo(url=WEBAPP_TUTORIALES))],
+
+        [InlineKeyboardButton("💳 Recargas",    web_app=WebAppInfo(url=WEBAPP_RECARGAS))],
+        [InlineKeyboardButton("💰 Cobros",      web_app=WebAppInfo(url=WEBAPP_COBROS))],
+        [InlineKeyboardButton("🔁 Cambios",     web_app=WebAppInfo(url=WEBAPP_CAMBIOS))],
+
+        [InlineKeyboardButton("🚨 Reportar falla", web_app=WebAppInfo(url=WEBAPP_REPORTAR))],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await query.edit_message_text(
         text="Selecciona una opción:",
         reply_markup=reply_markup
-    )
-
-
-# ─────────────────────────────
-# Promociones
-# ─────────────────────────────
-async def promociones(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
-
-    await query.edit_message_text(
-        "🎁 Promociones disponibles:\n\n"
-        "✔ Bono de bienvenida\n"
-        "✔ Giros gratis\n"
-        "✔ Promos semanales"
-    )
-
-
-# ─────────────────────────────
-# Reportar falla
-# ─────────────────────────────
-async def reportar_falla(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
-
-    await query.edit_message_text(
-        "🚨 Para reportar una falla, por favor envía:\n\n"
-        "• Tipo de problema\n"
-        "• Hora aproximada\n"
-        "• Captura de pantalla (si es posible)"
     )
 
 
@@ -88,10 +70,8 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(menu, pattern="menu"))
-    app.add_handler(CallbackQueryHandler(promociones, pattern="promo"))
-    app.add_handler(CallbackQueryHandler(reportar_falla, pattern="falla"))
 
-    print("🤖 Bot de soporte iniciado...")
+    print("🤖 Bot iniciado...")
     app.run_polling()
 
 
