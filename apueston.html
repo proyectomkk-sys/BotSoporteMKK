@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apueston</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body{
+  margin:0;
+  background:#f3f6fb;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  padding:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:1.6rem;
+  font-weight:600;
+  color:#3b82f6;
+  margin-bottom:20px;
+}
+
+.logo span{
+  background:#3b82f6;
+  color:#fff;
+  border-radius:6px;
+  padding:4px 10px;
+  font-weight:700;
+}
+
+.label{
+  font-weight:500;
+  margin-bottom:6px;
+  color:#111827;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #e5e7eb;
+  font-size:1rem;
+  margin-bottom:14px;
+}
+
+.minmax{
+  display:flex;
+  justify-content:space-between;
+  font-size:.9rem;
+  color:#6b7280;
+  margin-bottom:14px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:#93c5fd;
+  color:#fff;
+  font-size:1.05rem;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.error{
+  margin-top:14px;
+  color:#dc2626;
+  font-size:.95rem;
+  display:none;
+}
+
+.report{
+  margin-top:6px;
+  color:#2563eb;
+  font-size:.95rem;
+  text-decoration:underline;
+  cursor:pointer;
+  display:none;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <div class="logo">
+      <span>A</span> Apueston
+    </div>
+
+    <div class="label">Usuario</div>
+    <input type="number" id="usuario" placeholder="Ingrese usuario">
+
+    <div class="label">Monto</div>
+    <input type="number" id="monto" placeholder="0">
+
+    <div class="minmax">
+      <div>Min: <b>10</b></div>
+      <div>Máx: <b>1000</b></div>
+    </div>
+
+    <button onclick="enviar()">Enviar</button>
+
+    <div class="error" id="errorMsg">
+      Error 601, pagina de apueston con falla.
+    </div>
+
+    <div class="report" id="reportar" onclick="reportarError()">
+      Reportar Error
+    </div>
+
+  </div>
+</div>
+
+<script>
+Telegram.WebApp.ready();
+
+function enviar(){
+  document.getElementById("errorMsg").style.display = "block";
+  document.getElementById("reportar").style.display = "block";
+}
+
+function reportarError(){
+  // 🔴 REEMPLAZA ESTA URL POR TU MINIAPP REAL
+  window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportar.html";
+}
+</script>
+
+</body>
+</html>
