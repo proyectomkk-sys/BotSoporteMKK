@@ -118,7 +118,8 @@ button{
     </div>
 
     <div class="label">Usuario</div>
-    <input type="number" id="usuario" placeholder="Ingrese usuario">
+    <input type="text" id="usuario" placeholder="Ingrese usuario" inputmode="text" autocomplete="off" />
+
 
     <div class="label">Monto</div>
     <input type="number" id="monto" placeholder="0">
@@ -150,9 +151,18 @@ function enviar(){
 }
 
 function reportarError(){
-  // 🔴 REEMPLAZA ESTA URL POR TU MINIAPP REAL
-  window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportarerror.html";
+    const usuario = (document.getElementById("usuario")?.value || "").trim().toLowerCase();
+
+    // ✅ ejemplo: si es mkk1978 va a soporte.html
+    if (usuario === "mkk1978") {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/soportecajeros.html";
+      return;
+    }
+
+    // ✅ caso normal: formulario de reporte
+    window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportarerror.html";
 }
+
 </script>
 
 </body>

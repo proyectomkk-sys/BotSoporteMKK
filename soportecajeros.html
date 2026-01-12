@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Soporte - Preguntas Frecuentes</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: #f3f6fb;
+      }
+
+      .wrap {
+        max-width: 430px;
+        margin: 0 auto;
+        padding: 18px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+      }
+
+      h3 {
+        margin: 0 0 10px;
+        color: #111827;
+      }
+
+      .muted {
+        color: #6b7280;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+
+      .faqBtn {
+        width: 100%;
+        border: 0;
+        cursor: pointer;
+        background: #eaf2ff;
+        color: #1f2937;
+        font-weight: 700;
+        padding: 12px 12px;
+        border-radius: 12px;
+        text-align: left;
+        margin: 10px 0 6px;
+      }
+
+      .panel {
+        display: none;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 10px;
+        background: #fff;
+        margin-bottom: 6px;
+      }
+
+      .panel textarea {
+        width: 100%;
+        min-height: 120px;
+        border: 0;
+        outline: none;
+        resize: vertical;
+        font-size: 14px;
+        color: #111827;
+        background: transparent;
+      }
+
+      .footer {
+        margin-top: 14px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .link {
+        color: #2563eb;
+        text-decoration: underline;
+        cursor: pointer;
+        display: inline-block;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+
+      .plain {
+        color: #111827;
+        opacity: 0.85;
+        font-size: 13px;
+      }
+
+      .panel ol {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 14px;
+        color: #111827;
+      }
+
+      .panel li {
+        margin-bottom: 6px;
+      }
+
+      .panel a {
+        color: #2563eb;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h3>📌 Problemas frecuentes</h3>
+        <div class="muted">Toca una opción para ver instrucciones.</div>
+
+        <!-- FAQ 1 -->
+        <button class="faqBtn" onclick="togglePanel(1)">
+          1) Google Chrome desactualizado
+        </button>
+        <div class="panel" id="p1">
+          <textarea readonly>
+            1. Abre Chrome: en tu ordenador. 
+            2. Haz clic en los tres puntos verticales (Más) en la esquina superior derecha. 
+            3. Ve a Ayuda > Información de Google Chrome. 
+            4. Chrome buscará actualizaciones y, si hay alguna, la descargará automáticamente. 
+            5. Haz clic en Reiniciar para completar la instalación. Si no ves "Reiniciar", ya está actualizado. 
+        </textarea
+          >
+        </div>
+
+        <!-- FAQ 2 -->
+        <button class="faqBtn" onclick="togglePanel(2)">
+          2) Verificacion de internet
+        </button>
+        <div class="panel" id="p2">
+          <ol>
+            <li>
+              Verifica que tu conexión a internet sea estable a través de
+              <a
+                href="https://www.speedtest.net/es"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://www.speedtest.net/es
+              </a>
+            </li>
+            <li>Reinicia tu router o módem.</li>
+            <li>Prueba abrir otra página web para confirmar la conexión.</li>
+            <li>Llama a tu compañía de internet si el problema persiste.</li>
+          </ol>
+        </div>
+
+        <!-- FAQ 3 -->
+        <button class="faqBtn" onclick="togglePanel(3)">
+          3) Verifica tus dispositivos
+        </button>
+        <div class="panel" id="p3">
+          <textarea readonly>
+1. Verifica que tu PC o dispositivo móvil esté funcionando correctamente.
+2. Verifica que ambos estén conectados por cable de red y/o USB respectivamente.
+3. Verifica que no haya una configuración pendiente de aprobacion en alguno de los dispositivos.
+4. Reinicia ambos dispositivos y vuelve a intentarlo.
+        </textarea
+          >
+        </div>
+
+        <!-- FAQ 4 -->
+        <button class="faqBtn" onclick="togglePanel(4)">
+          4) Si estás fuera de casa
+        </button>
+        <div class="panel" id="p4">
+          <textarea readonly>
+1. En caso de contar con cámaras de seguridad, verifica si tienes acceso desde tu móvil o laptop.
+2. Si cuentas con teamviewer u otro software de acceso remoto, intenta conectarte a tu PC.
+3. Si no tienes acceso, contacta a tu proveedor de servicio eléctrico.
+        </textarea
+          >
+        </div>
+
+        <!-- FAQ 5 -->
+        <button class="faqBtn" onclick="togglePanel(5)">
+          5) Pregunta frecuente #5
+        </button>
+        <div class="panel" id="p5">
+          <textarea readonly>
+1. 
+2. 
+3.
+        </textarea
+          >
+        </div>
+
+        <div class="footer">
+          <!-- link a tu formulario -->
+          <span class="link" onclick="goReport()">Reportar Error</span>
+          <div class="plain">directamente a soporte</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tg = window.Telegram?.WebApp;
+      try {
+        tg?.expand();
+        tg?.ready();
+      } catch (e) {}
+
+      // ✅ Cambia si tu archivo se llama distinto:
+      const REPORT_URL = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportarerror.html";
+
+      function togglePanel(n) {
+        const panels = [1, 2, 3, 4, 5].map((i) =>
+          document.getElementById("p" + i)
+        );
+        panels.forEach((p, idx) => {
+          const isTarget = idx + 1 === n;
+          // si es el target, alternar; los demás cerrar
+          if (isTarget)
+            p.style.display = p.style.display === "block" ? "none" : "block";
+          else p.style.display = "none";
+        });
+      }
+
+      function goReport() {
+        window.location.href = REPORT_URL;
+      }
+    </script>
+  </body>
+</html>

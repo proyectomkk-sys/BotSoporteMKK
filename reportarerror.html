@@ -5,22 +5,26 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reportar Falla</title>
 
+  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    body { font-family: Arial, sans-serif; padding: 14px; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; }
+    body { font-family: Arial, sans-serif; padding: 14px; background:#f3f6fb; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; background:#fff; max-width:420px; margin:0 auto; }
     h3 { margin: 0 0 10px; }
-    .muted { opacity: .8; font-size: 14px; margin: 6px 0 12px; }
-    label { display:block; margin: 10px 0 6px; font-weight: 600; }
+    .muted { opacity: .85; font-size: 14px; margin: 6px 0 12px; color:#374151; }
+    label { display:block; margin: 10px 0 6px; font-weight: 600; color:#111827; }
     input, textarea, button {
       width: 100%; padding: 10px; border-radius: 10px;
       border: 1px solid #ccc; box-sizing: border-box;
+      font-size: 15px;
     }
     textarea { min-height: 110px; resize: vertical; }
-    button { border: 0; cursor: pointer; margin-top: 10px; }
+    button { border: 0; cursor: pointer; margin-top: 10px; background:#3b82f6; color:#fff; font-weight:700; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
     .btn1 { margin-top: 14px; }
-    .small { font-size: 12px; opacity: .75; margin-top: 10px; }
+    .small { font-size: 12px; opacity: .8; margin-top: 10px; color:#4b5563; }
+    .status { margin-top: 10px; font-size: 13px; color:#111827; }
   </style>
 </head>
 
@@ -37,24 +41,38 @@
 
     <button class="btn1" id="sendBtn">📨 Enviar reporte</button>
 
+    <div id="status" class="status"></div>
+
     <div class="small">
-      Nota: La imagen NO se puede enviar por sendData. Para mandar captura al grupo, se necesita un backend (endpoint) para subirla.
+      Nota: El reporte se enviará al equipo de soporte. Si adjuntas captura, se enviará junto al ticket.
     </div>
   </div>
 
   <script>
-    const tg = window.Telegram.WebApp;
+    // ✅ 1) URL de tu backend (cámbiala)
+    const BACKEND_URL = "https://apueston-backend.onrender.com/ticket";
 
-    // Esto puede fallar si abres el HTML fuera de Telegram, por eso lo protejo:
-    if (tg) {
-      tg.expand();
-    }
+    // ✅ 2) Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+
+    try {
+      tg?.expand();
+      tg?.ready();
+    } catch (e) {}
 
     const user = tg?.initDataUnsafe?.user;
+
     const userInfo = document.getElementById("userInfo");
     const descEl = document.getElementById("desc");
     const fileEl = document.getElementById("shot");
+    const sendBtn = document.getElementById("sendBtn");
+    const statusEl = document.getElementById("status");
 
+    function setStatus(text) {
+      statusEl.textContent = text || "";
+    }
+
+    // Mostrar info del usuario
     if (user) {
       const fullName = [user.first_name, user.last_name].filter(Boolean).join(" ");
       userInfo.textContent = `👤 ${fullName} | @${user.username || "sin_username"} | id: ${user.id}`;
@@ -62,38 +80,72 @@
       userInfo.textContent = "⚠️ No pude leer datos del usuario. Abre esto desde Telegram.";
     }
 
-    function buildPayload() {
-      return JSON.stringify({
-        type: "reporte_falla",
-        description: descEl.value.trim(),
-        hasScreenshot: !!fileEl.files?.[0],
-        user: user || null,
-        ts: Date.now()
-      });
-    }
-
     function validar() {
       const d = descEl.value.trim();
-      if (!user) { alert("Abre esta pantalla desde Telegram."); return false; }
+      if (!user) { alert("Abre esta pantalla desde Telegram (dentro del bot)."); return false; }
       if (d.length < 5) { alert("Describe el problema con un poco más de detalle."); return false; }
       return true;
     }
 
-    document.getElementById("sendBtn").addEventListener("click", () => {
+    async function enviarTicket() {
       if (!validar()) return;
 
-      tg.sendData(buildPayload());
-
-      // showAlert SOLO funciona dentro de Telegram WebApp.
-      if (tg?.showAlert) {
-        tg.showAlert("✅ Reporte enviado. ¡Gracias por ayudar a mejorar Apueston!");
-      } else {
-        alert("✅ Reporte enviado.");
+      if (!BACKEND_URL || BACKEND_URL.includes("TU_BACKEND")) {
+        alert("⚠️ Falta configurar BACKEND_URL en reportar.html");
+        return;
       }
 
-      // Cerrar miniapp (solo dentro de Telegram)
-      if (tg?.close) tg.close();
-    });
+      sendBtn.disabled = true;
+      setStatus("Enviando reporte...");
+
+      const payloadObj = {
+        type: "reporte_falla",
+        description: descEl.value.trim(),
+        user: user,
+        ts: Date.now()
+      };
+
+      const form = new FormData();
+      form.append("payload", JSON.stringify(payloadObj));
+
+      if (fileEl.files && fileEl.files[0]) {
+        form.append("screenshot", fileEl.files[0]);
+      }
+
+      try {
+        const res = await fetch(BACKEND_URL, {
+          method: "POST",
+          body: form
+        });
+
+        if (!res.ok) {
+          const t = await res.text();
+          console.log("Backend error:", t);
+          alert("❌ Error enviando ticket. Intenta nuevamente.");
+          setStatus("Error al enviar. Revisa conexión/servidor.");
+          sendBtn.disabled = false;
+          return;
+        }
+
+        // OK
+        setStatus("✅ Reporte enviado.");
+        if (tg?.showAlert) {
+          tg.showAlert("✅ Reporte enviado. Te responderemos por el chat.");
+        } else {
+          alert("✅ Reporte enviado. Te responderemos por el chat.");
+        }
+
+        // Cerrar miniapp
+        tg?.close();
+      } catch (err) {
+        console.log(err);
+        alert("❌ No se pudo conectar con el servidor.");
+        setStatus("Sin conexión con el servidor.");
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener("click", enviarTicket);
   </script>
 </body>
 </html>
