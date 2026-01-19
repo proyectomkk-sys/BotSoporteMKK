@@ -107,6 +107,12 @@ body{
       <span>Reportar Falla</span>
     </div>
 
+    <!-- ✅ IMPERIAL -->
+    <div class="btn" onclick="openReportarFalla()">
+      <div class="icon">👑</div>
+      <span>Imperial Poker</span>
+    </div>
+
   </div>
 </div>
 
@@ -127,6 +133,12 @@ body{
 <audio id="sfxFalla" preload="auto">
   <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
   <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundfalla.mp3" type="audio/mpeg">
+</audio>
+
+  <!-- ✅ Audio opcional para Reportar -->
+<audio id="sfxImperial" preload="auto">
+  <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
+  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundimperial.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -169,6 +181,13 @@ body{
     }, 900);
   }
 
+  function openImperial() {
+    playSfx("sfxCobros");
+    setTimeout(() => {
+      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/imperial.html";
+    }, 1500);
+  }
+
   // (te lo dejo por si aún lo usas en otras pantallas)
   function sendResult(option){
     tg.sendData(option);
@@ -178,4 +197,5 @@ body{
 
 </body>
 </html>
+
 
