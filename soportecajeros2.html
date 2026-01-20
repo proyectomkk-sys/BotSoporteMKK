@@ -278,8 +278,10 @@
             buttons: [{ type: "ok" }],
           });
 
-          // Opcional: cerrar
-          // setTimeout(() => tg?.close(), 900);
+          // ⏱️ cerrar la página automáticamente
+          setTimeout(() => {
+            tg?.close();
+          }, 1200);
         } catch (e) {
           sendingReport = false;
 
