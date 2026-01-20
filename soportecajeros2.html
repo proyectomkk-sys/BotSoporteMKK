@@ -263,6 +263,13 @@
         try {
           tg.sendData(JSON.stringify(payload));
 
+          // ✅ Feedback visual inmediato (aunque no haya confirmación real)
+          if (link) link.textContent = "✅ Reporte enviado";
+          if (status) status.textContent = "Ya puedes cerrar esta ventana";
+
+          // opcional: cerrar la miniapp
+          // setTimeout(() => tg.close(), 900);
+
           tg.showPopup?.({
             title: "✅ Reporte enviado",
             message:
