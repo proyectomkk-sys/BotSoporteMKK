@@ -1,203 +1,239 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>MiniApp Menu</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>MiniApp Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<style>
-:root{
-  --bg:#eef3ff;
-  --card:#ffffff;
-  --text:#1f2937;
-  --primary:#4f8bff;
-  --border:#d6e1ff;
-}
+    <style>
+      :root {
+        --bg: #eef3ff;
+        --card: #ffffff;
+        --text: #1f2937;
+        --primary: #4f8bff;
+        --border: #d6e1ff;
+      }
 
-body{
-  margin:0;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  background: var(--bg);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-.container{
-  width:100%;
-  max-width:430px;
-  padding:26px;
-}
+      .container {
+        width: 100%;
+        max-width: 430px;
+        padding: 26px;
+      }
 
-.title{
-  text-align:center;
-  color:#111827;
-  font-size:1.3rem;
-  margin-bottom:25px;
-  font-weight:600;
-}
+      .title {
+        text-align: center;
+        color: #111827;
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+        font-weight: 600;
+      }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
 
-.btn{
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:18px 10px;
-  color:var(--text);
-  text-align:center;
-  transition:.25s;
-  cursor:pointer;
-}
+      .btn {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px 10px;
+        color: var(--text);
+        text-align: center;
+        transition: 0.25s;
+        cursor: pointer;
+      }
 
-.btn:hover{
-  transform: translateY(-3px);
-  border-color: var(--primary);
-  box-shadow:0 10px 28px rgba(79,139,255,.25);
-}
+      .btn:hover {
+        transform: translateY(-3px);
+        border-color: var(--primary);
+        box-shadow: 0 10px 28px rgba(79, 139, 255, 0.25);
+      }
 
-.icon{
-  font-size:34px;
-  margin-bottom:6px;
-}
+      .icon {
+        font-size: 34px;
+        margin-bottom: 6px;
+      }
 
-.btn span{
-  display:block;
-  font-size:15px;
-  font-weight:500;
-  letter-spacing:.3px;
-}
-</style>
-</head>
+      .btn span {
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+      }
+    </style>
+  </head>
 
-<body>
-<div class="container">
-  <div class="title">Selecciona una opción</div>
+  <body>
+    <div class="container">
+      <div class="title">Selecciona una opción</div>
 
-  <!-- ✅ GRILLA ACTIVADA -->
-  <div class="grid">
+      <!-- ✅ GRILLA ACTIVADA -->
+      <div class="grid">
+        <!-- RECARGAS -->
+        <div class="btn" onclick="openCargas()">
+          <div class="icon">💳</div>
+          <span>Recargas</span>
+        </div>
 
-    <!-- RECARGAS -->
-    <div class="btn" onclick="openCargas()">
-      <div class="icon">💳</div>
-      <span>Recargas</span>
+        <!-- COBROS -->
+        <div class="btn" onclick="openCobros()">
+          <div class="icon">💵</div>
+          <span>Cobros</span>
+        </div>
+
+        <!-- CAMBIOS -->
+        <div class="btn" onclick="openCambios()">
+          <div class="icon">🔄</div>
+          <span>Cambios APP--PPP</span>
+        </div>
+
+        <!-- ✅ REPORTAR FALLA (NUEVO) -->
+        <div class="btn" onclick="openReportarFalla()">
+          <div class="icon">🚨</div>
+          <span>Reportar Falla</span>
+        </div>
+
+        <!-- ✅ IMPERIAL -->
+        <div class="btn" onclick="openImperial()">
+          <div class="icon">👑</div>
+          <span>Imperial Poker</span>
+        </div>
+
+        <!-- ✅ BIOMETRICO -->
+        <div class="btn" onclick="openBiometrico()">
+          <div class="icon">🫆</div>
+          <span>Biometrico Metabet</span>
+        </div>
+      </div>
     </div>
 
-    <!-- COBROS -->
-    <div class="btn" onclick="openCobros()">
-      <div class="icon">💵</div>
-      <span>Cobros</span>
-    </div>
+    <!-- Audios -->
+    <audio id="sfxCargas" preload="auto">
+      <source
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundrecarga.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-    <!-- CAMBIOS -->
-    <div class="btn" onclick="openCambios()">
-      <div class="icon">🔄</div>
-      <span>Cambios APP--PPP</span>
-    </div>
+    <audio id="sfxCobros" preload="auto">
+      <source
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcobro.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-    <!-- ✅ REPORTAR FALLA (NUEVO) -->
-    <div class="btn" onclick="openReportarFalla()">
-      <div class="icon">🚨</div>
-      <span>Reportar Falla</span>
-    </div>
+    <audio id="sfxCambios" preload="auto">
+      <source
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcambio.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-    <!-- ✅ IMPERIAL -->
-    <div class="btn" onclick="openImperial()">
-      <div class="icon">👑</div>
-      <span>Imperial Poker</span>
-    </div>
+    <!-- ✅ Audio opcional para Reportar -->
+    <audio id="sfxFalla" preload="auto">
+      <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
+      <source
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundfalla.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-  </div>
-</div>
+    <!-- ✅ Audio opcional para Imperial -->
+    <audio id="sfxImperial" preload="auto">
+      <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
+      <source
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundimperial.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-<!-- Audios -->
-<audio id="sfxCargas" preload="auto">
-  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundrecarga.mp3" type="audio/mpeg">
-</audio>
+    <!-- ✅ Audio opcional para Biometrico -->
+    <audio id="sfxBimetrico" preload="auto">
+      <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
+      <source
+        src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundbiometrico.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-<audio id="sfxCobros" preload="auto">
-  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcobro.mp3" type="audio/mpeg">
-</audio>
+    <script>
+      let tg = window.Telegram.WebApp;
+      tg.expand();
 
-<audio id="sfxCambios" preload="auto">
-  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundcambio.mp3" type="audio/mpeg">
-</audio>
+      function playSfx(id) {
+        const audio = document.getElementById(id);
+        if (!audio) return;
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+      }
 
-<!-- ✅ Audio opcional para Reportar -->
-<audio id="sfxFalla" preload="auto">
-  <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
-  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundfalla.mp3" type="audio/mpeg">
-</audio>
+      function openCargas() {
+        playSfx("sfxCargas");
+        setTimeout(() => {
+          window.location.href =
+            "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html";
+        }, 1000);
+      }
 
-  <!-- ✅ Audio opcional para Reportar -->
-<audio id="sfxImperial" preload="auto">
-  <!-- Si no tienes este sonido, puedes duplicar uno existente o borrar este audio -->
-  <source src="https://proyectomkk-sys.github.io/BotSoporteMKK/soundimperial.mp3" type="audio/mpeg">
-</audio>
+      function openCobros() {
+        playSfx("sfxCobros");
+        setTimeout(() => {
+          window.location.href =
+            "https://proyectomkk-sys.github.io/BotSoporteMKK/cobros.html";
+        }, 1500);
+      }
 
-<script>
-  let tg = window.Telegram.WebApp;
-  tg.expand();
+      function openCambios() {
+        playSfx("sfxCambios");
+        setTimeout(() => {
+          window.location.href =
+            "https://proyectomkk-sys.github.io/BotSoporteMKK/cambios.html";
+        }, 1000);
+      }
 
-  function playSfx(id){
-    const audio = document.getElementById(id);
-    if (!audio) return;
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
-  }
+      // ✅ NUEVO: abre tu miniapp de reportes
+      function openReportarFalla() {
+        playSfx("sfxFalla");
+        setTimeout(() => {
+          window.location.href =
+            "https://proyectomkk-sys.github.io/BotSoporteMKK/reportar.html";
+        }, 900);
+      }
 
-  function openCargas() {
-    playSfx("sfxCargas");
-    setTimeout(() => {
-      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/recargas.html";
-    }, 1000);
-  }
+      function openImperial() {
+        playSfx("sfxImperial");
+        setTimeout(() => {
+          window.location.href =
+            "https://proyectomkk-sys.github.io/BotSoporteMKK/imperial.html";
+        }, 1500);
+      }
 
-  function openCobros() {
-    playSfx("sfxCobros");
-    setTimeout(() => {
-      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cobros.html";
-    }, 1500);
-  }
+      function openBiometrico() {
+        playSfx("sfxBiometrico");
+        setTimeout(() => {
+          window.location.href =
+            "https://proyectomkk-sys.github.io/BotSoporteMKK/biometrico.html";
+        }, 1500);
+      }
 
-  function openCambios() {
-    playSfx("sfxCambios");
-    setTimeout(() => {
-      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/cambios.html";
-    }, 1000);
-  }
-
-  // ✅ NUEVO: abre tu miniapp de reportes
-  function openReportarFalla() {
-    playSfx("sfxFalla");
-    setTimeout(() => {
-      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/reportar.html";
-    }, 900);
-  }
-
-  function openImperial() {
-    playSfx("sfxImperial");
-    setTimeout(() => {
-      window.location.href = "https://proyectomkk-sys.github.io/BotSoporteMKK/imperial.html";
-    }, 1500);
-  }
-
-  // (te lo dejo por si aún lo usas en otras pantallas)
-  function sendResult(option){
-    tg.sendData(option);
-    tg.close();
-  }
-</script>
-
-</body>
+      // (te lo dejo por si aún lo usas en otras pantallas)
+      function sendResult(option) {
+        tg.sendData(option);
+        tg.close();
+      }
+    </script>
+  </body>
 </html>
-
-
-
-
