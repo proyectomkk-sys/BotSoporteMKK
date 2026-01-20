@@ -192,23 +192,25 @@
     </div>
 
     <script>
-      // Telegram WebApp
+      // Telegram WebApp (si está dentro de Telegram)
       const tg = window.Telegram?.WebApp;
       try {
         tg?.expand();
         tg?.ready();
       } catch (e) {}
 
-      let sendingReport = false; // evita doble envío
+      let sendingReport = false;
+
+      // ✅ Tu backend en Render (sin slash al final)
+      const API_BASE = "https://apueston-backend.onrender.com";
 
       function togglePanel(n) {
-        // Solo existen p1..p4
         const panels = [1, 2, 3, 4].map((i) =>
           document.getElementById("p" + i),
         );
 
         panels.forEach((p, idx) => {
-          if (!p) return; // seguridad
+          if (!p) return;
           const isTarget = idx + 1 === n;
 
           if (isTarget) {
@@ -219,19 +221,10 @@
         });
       }
 
-      function goReport() {
+      async function goReport() {
         if (sendingReport) return;
-
-        if (!tg) {
-          alert(
-            "Abre esta página desde Telegram para enviar el reporte a soporte.",
-          );
-          return;
-        }
-
         sendingReport = true;
 
-        // Cambios visuales
         const link = document.getElementById("reportLink");
         const status = document.getElementById("reportStatus");
 
@@ -242,17 +235,18 @@
         }
         if (status) status.textContent = "Por favor, no presiones nuevamente";
 
-        const user = tg.initDataUnsafe?.user || {};
+        // Datos del usuario (si no está en Telegram, igual intentamos mandar)
+        const u = tg?.initDataUnsafe?.user;
 
-        const payload = {
+        const payloadObj = {
           type: "reporte_falla",
           ts: Date.now(),
           hasScreenshot: false,
           user: {
-            id: user.id,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name,
+            id: u?.id || null,
+            username: u?.username || "sin_username",
+            first_name: u?.first_name || "",
+            last_name: u?.last_name || "",
           },
           description:
             "Bot Bet Cajeros 24/7 caído.\n" +
@@ -261,28 +255,32 @@
         };
 
         try {
-          tg.sendData(JSON.stringify(payload));
+          const fd = new FormData();
+          fd.append("payload", JSON.stringify(payloadObj));
 
-          // ✅ Feedback visual inmediato (aunque no haya confirmación real)
+          const res = await fetch(`${API_BASE}/ticket`, {
+            method: "POST",
+            body: fd,
+          });
+
+          if (!res.ok) {
+            const txt = await res.text();
+            throw new Error(txt);
+          }
+
           if (link) link.textContent = "✅ Reporte enviado";
-          if (status) status.textContent = "Ya puedes cerrar esta ventana";
+          if (status) status.textContent = "Soporte recibió el reporte";
 
-          // opcional: cerrar la miniapp
-          // setTimeout(() => tg.close(), 900);
-
-          tg.showPopup?.({
+          tg?.showPopup?.({
             title: "✅ Reporte enviado",
             message:
               "Soporte recibió el reporte. Te responderemos por Telegram.",
             buttons: [{ type: "ok" }],
           });
 
-          // Si quieres cerrar:
-          // setTimeout(() => tg.close(), 1200);
-
-          // Nota: no re-habilitamos porque ya se envió (evita spam)
+          // Opcional: cerrar
+          // setTimeout(() => tg?.close(), 900);
         } catch (e) {
-          // Si falla, re-habilitamos
           sendingReport = false;
 
           if (link) {
@@ -292,7 +290,7 @@
           }
           if (status) status.textContent = "directamente a soporte";
 
-          alert("No se pudo enviar el reporte. Intenta nuevamente.");
+          alert("No se pudo enviar el reporte. " + (e?.message || ""));
         }
       }
     </script>
