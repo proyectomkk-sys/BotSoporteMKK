@@ -192,42 +192,32 @@
     </div>
 
     <script>
+      // Telegram WebApp
       const tg = window.Telegram?.WebApp;
       try {
         tg?.expand();
         tg?.ready();
       } catch (e) {}
 
-      // ✅ Cambia si tu archivo se llama distinto:
-      const REPORT_URL =
-        "https://proyectomkk-sys.github.io/BotSoporteMKK/reportarerror.html";
+      let sendingReport = false; // evita doble envío
 
       function togglePanel(n) {
-        const panels = [1, 2, 3, 4, 5].map((i) =>
+        // Solo existen p1..p4
+        const panels = [1, 2, 3, 4].map((i) =>
           document.getElementById("p" + i),
         );
+
         panels.forEach((p, idx) => {
+          if (!p) return; // seguridad
           const isTarget = idx + 1 === n;
-          // si es el target, alternar; los demás cerrar
-          if (isTarget)
+
+          if (isTarget) {
             p.style.display = p.style.display === "block" ? "none" : "block";
-          else p.style.display = "none";
+          } else {
+            p.style.display = "none";
+          }
         });
       }
-
-      const tg = window.Telegram?.WebApp;
-      try {
-        tg?.expand();
-        tg?.ready();
-      } catch (e) {}
-
-      const tg = window.Telegram?.WebApp;
-      try {
-        tg?.expand();
-        tg?.ready();
-      } catch (e) {}
-
-      let sendingReport = false; // 🔒 evita doble envío
 
       function goReport() {
         if (sendingReport) return;
@@ -241,14 +231,16 @@
 
         sendingReport = true;
 
-        // 🔁 Cambios visuales
+        // Cambios visuales
         const link = document.getElementById("reportLink");
         const status = document.getElementById("reportStatus");
 
-        link.style.pointerEvents = "none";
-        link.style.opacity = "0.6";
-        link.textContent = "⏳ Enviando reporte...";
-        status.textContent = "Por favor, no presiones nuevamente";
+        if (link) {
+          link.style.pointerEvents = "none";
+          link.style.opacity = "0.6";
+          link.textContent = "⏳ Enviando reporte...";
+        }
+        if (status) status.textContent = "Por favor, no presiones nuevamente";
 
         const user = tg.initDataUnsafe?.user || {};
 
@@ -278,15 +270,21 @@
             buttons: [{ type: "ok" }],
           });
 
-          // opcional: cerrar después de 1.5s
-          // setTimeout(() => tg.close(), 1500);
+          // Si quieres cerrar:
+          // setTimeout(() => tg.close(), 1200);
+
+          // Nota: no re-habilitamos porque ya se envió (evita spam)
         } catch (e) {
-          // 🔴 Si falla, re-habilitamos
+          // Si falla, re-habilitamos
           sendingReport = false;
-          link.style.pointerEvents = "auto";
-          link.style.opacity = "1";
-          link.textContent = "Reportar Error";
-          status.textContent = "directamente a soporte";
+
+          if (link) {
+            link.style.pointerEvents = "auto";
+            link.style.opacity = "1";
+            link.textContent = "Reportar Error";
+          }
+          if (status) status.textContent = "directamente a soporte";
+
           alert("No se pudo enviar el reporte. Intenta nuevamente.");
         }
       }
