@@ -183,8 +183,10 @@
         </div>
 
         <div class="footer">
-          <span class="link" onclick="goReport()">Reportar Error</span>
-          <div class="plain">directamente a soporte</div>
+          <span class="link" id="reportLink" onclick="goReport()"
+            >Reportar Error</span
+          >
+          <div class="plain" id="reportStatus">directamente a soporte</div>
         </div>
       </div>
     </div>
@@ -219,14 +221,34 @@
         tg?.ready();
       } catch (e) {}
 
+      const tg = window.Telegram?.WebApp;
+      try {
+        tg?.expand();
+        tg?.ready();
+      } catch (e) {}
+
+      let sendingReport = false; // 🔒 evita doble envío
+
       function goReport() {
-        // ⚠️ Esto SOLO funciona si abriste la página como MiniApp desde Telegram
+        if (sendingReport) return;
+
         if (!tg) {
           alert(
             "Abre esta página desde Telegram para enviar el reporte a soporte.",
           );
           return;
         }
+
+        sendingReport = true;
+
+        // 🔁 Cambios visuales
+        const link = document.getElementById("reportLink");
+        const status = document.getElementById("reportStatus");
+
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.6";
+        link.textContent = "⏳ Enviando reporte...";
+        status.textContent = "Por favor, no presiones nuevamente";
 
         const user = tg.initDataUnsafe?.user || {};
 
@@ -248,18 +270,26 @@
 
         try {
           tg.sendData(JSON.stringify(payload));
+
           tg.showPopup?.({
             title: "✅ Reporte enviado",
-            message: "Se envió a soporte. Te responderemos por Telegram.",
+            message:
+              "Soporte recibió el reporte. Te responderemos por Telegram.",
             buttons: [{ type: "ok" }],
           });
-          // Si quieres cerrar la miniapp después:
-            tg.close();
+
+          // opcional: cerrar después de 1.5s
+          // setTimeout(() => tg.close(), 1500);
         } catch (e) {
+          // 🔴 Si falla, re-habilitamos
+          sendingReport = false;
+          link.style.pointerEvents = "auto";
+          link.style.opacity = "1";
+          link.textContent = "Reportar Error";
+          status.textContent = "directamente a soporte";
           alert("No se pudo enviar el reporte. Intenta nuevamente.");
         }
       }
     </script>
   </body>
 </html>
-
